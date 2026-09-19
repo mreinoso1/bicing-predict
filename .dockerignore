@@ -1,0 +1,4 @@
+data/
+.env
+_pycache__/
+bicing_predict.egg-info
