@@ -1,3 +1,5 @@
+from datetime import UTC, datetime
+
 import duckdb
 import pandas as pd
 import pytest
@@ -7,14 +9,14 @@ from bicing_predict.ingest import data_collect
 
 def csv_correct(path):
     aux = pd.DataFrame(
-        [[1, "1568", "NOT_IN_SERVICE", 1,0,1,20],[1,"5890","MAINTENANCE",0,0,0,20]],
+        [[1, "1773144000", "NOT_IN_SERVICE", 1,0,1,20],[1,"1773145000","MAINTENANCE",0,0,0,20]],
         columns = ["station_id", "last_reported", "status", "is_installed", "is_renting", "is_returning", "num_bikes_available"],
     )
     aux.to_csv(path_or_buf=path, index = False)
 
 def csv_with_v1(path):
     aux = pd.DataFrame(
-        [[1, "1568", "NOT_IN_SERVICE", 1,0,1,20,1],[1,"5890","MAINTENANCE",0,0,0,18,1]],
+        [[1, "1773144000", "NOT_IN_SERVICE", 1,0,1,20,1],[1,"1773145000","MAINTENANCE",0,0,0,18,1]],
         columns = ["station_id", "last_reported", "status", "is_installed", "is_renting", "is_returning", "num_bikes_available","V1"],
     )
     aux.to_csv(path_or_buf=path, index = False)
@@ -22,11 +24,20 @@ def csv_with_v1(path):
 
 def csv_with_NA(path):
     aux = pd.DataFrame(
-        [[1, "1568", "NOT_IN_SERVICE", 1,0,1,20],[1,"5890","MAINTENANCE",0,0,0,18], 
+        [[1, "1773144000", "NOT_IN_SERVICE", 1,0,1,20],[1,"1773145000","MAINTENANCE",0,0,0,18], 
         [1,"NA","MAINTENANCE",0,0,0,18],[1,"5890","NA",0,0,0,18]],
         columns = ["station_id", "last_reported", "status", "is_installed", "is_renting", "is_returning", "num_bikes_available"],
     )
     aux.to_csv(path_or_buf=path, index = False)
+
+
+def csv_for_utc(path):
+    aux = pd.DataFrame(
+        [[1,"1773144000","IN_SERVICE",1,1,1,5]],
+        columns=["station_id", "last_reported", "status", "is_installed", "is_renting", "is_returning", "num_bikes_available"],
+    )
+    aux.to_csv(path_or_buf=path, index=False
+)
 
 
 @pytest.fixture()
@@ -71,3 +82,10 @@ def test_columns(connect, tmp_path):
     conn.execute("""SELECT id, reported_at, status, installed, renting, is_returning, available_bikes FROM bicing_6_months""").fetchall()
     #If it does not arises an exception then all columns are in the table and test passes
     assert 1
+
+def test_reported_at_utc(connect, tmp_path):
+    conn = connect
+    temp = tmp_path / "for_utc.csv"
+    csv_for_utc(temp)
+    data_collect.fill_table(conn,temp)
+    assert conn.sql("SELECT reported_at FROM bicing_6_months").fetchone()[0] == datetime(2026, 3, 10, 12, 0, tzinfo=UTC)
