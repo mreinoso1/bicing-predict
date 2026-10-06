@@ -71,3 +71,13 @@ def test_gradient(data):
     manual_der = np.array(manual_der)
     gradient, _ = model.gradient(X_train,y_train,weights,X_train.shape[0],0,inter)
     assert np.allclose(manual_der,gradient,atol = 1e-3)
+
+def test_alpha_val(data):
+    X_train, X_val, _X_test, y_train, y_val, _y_test, _,_ = data
+    weights = np.zeros(X_train.shape[1])
+    reg_parameters = [10,1,0,0.1,0.01,1e-2,1e-3,1e-4,1e-5,1e-6]
+    tolerance = 1e-6
+    learning = 0.0001
+    rmse_alphas = model.alphas(reg_parameters,X_val,y_val,X_train,y_train,weights,tolerance,learning,200000)
+    index = np.argmin(rmse_alphas)
+    assert reg_parameters[index] == 1

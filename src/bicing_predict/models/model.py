@@ -62,3 +62,37 @@ def Adam(
                 break
 
     return weights, intercept
+
+
+def alphas(
+    alphas: list[float],
+    X_val,
+    y_val,
+    X_train,
+    y_train,
+    weights,
+    tolerance,
+    learning_rate,
+    epochs,
+    beta1=0.9,
+    beta2=0.999,
+):
+    ans = []
+    for parameter in alphas:
+        w, b = Adam(
+            X_train,
+            y_train,
+            weights,
+            tolerance,
+            learning_rate,
+            epochs,
+            parameter,
+            beta1,
+            beta2,
+        )
+        sq_error = (func(X_val, w, b) - y_val) ** 2
+        mse = np.sum(sq_error)
+        rmse = np.mean(mse)
+        ans.append(rmse)
+
+    return np.array(ans)
