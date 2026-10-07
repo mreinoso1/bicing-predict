@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import numpy as np
 
 
@@ -91,8 +89,8 @@ def alphas(
             beta2,
         )
         sq_error = (func(X_val, w, b) - y_val) ** 2
-        mse = np.sum(sq_error)
-        rmse = np.mean(mse)
+        mse = np.sum(sq_error) / X_val.shape[0]
+        rmse = np.sqrt(mse)
         ans.append(rmse)
 
     return np.array(ans)
