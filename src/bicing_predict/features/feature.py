@@ -63,4 +63,4 @@ def feature_eng(path):
     y_val = val["avg_bikes"].to_numpy()
     y_test = test["avg_bikes"].to_numpy()
 
-    return X_train, X_val, X_test, y_train, y_val, y_test
+    return X_train, X_val, X_test, y_train, y_val, y_test, column_trans
