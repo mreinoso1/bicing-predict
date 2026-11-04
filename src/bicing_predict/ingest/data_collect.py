@@ -30,7 +30,8 @@ def fill_table(conn, path: str) -> None:
     """)
 
 
-def create_parquet(conn) -> None:
-    conn.sql(""" 
-    COPY (SELECT * FROM bicing_6_months) TO 'bicing.parquet' (FORMAT parquet)   
+def create_parquet(conn, root) -> None:
+    destiny = f"{root}/bicing.parquet"
+    conn.sql(f""" 
+    COPY (SELECT * FROM bicing_6_months) TO '{destiny}' (FORMAT parquet)   
     """)
