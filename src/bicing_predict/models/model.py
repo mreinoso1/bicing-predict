@@ -32,6 +32,8 @@ def Adam(
     moment_v_intercept = 0
     instant = 1
     intercept = 0
+    norma = 0
+    ep = 0
     for i in range(epochs):
         a_t = learning_rate
         grd, grd_inter = gradient(X, y, weights, X.shape[0], regu_param, intercept)
@@ -53,17 +55,18 @@ def Adam(
             * m_bias_correct_intercept
         )
         instant += 1
-
+        ep = i
         if (i % 1000) == 0:
             norma = np.sqrt(np.sum(grd**2) + grd_inter**2)
+            print(f"norma: {norma} \nepoch: {ep}")
             if norma < tolerance:
                 break
 
-    return weights, intercept
+    return weights, intercept, norma, ep
 
 
 def alphas(
-    alphas: list[float],
+    alphas,
     X_val,
     y_val,
     X_train,
@@ -77,7 +80,7 @@ def alphas(
 ):
     ans = []
     for parameter in alphas:
-        w, b = Adam(
+        w, b, _, _ = Adam(
             X_train,
             y_train,
             weights,
@@ -89,8 +92,7 @@ def alphas(
             beta2,
         )
         sq_error = (func(X_val, w, b) - y_val) ** 2
-        mse = np.sum(sq_error) / X_val.shape[0]
-        rmse = np.sqrt(mse)
+        rmse = np.sqrt(np.mean(sq_error))
         ans.append(rmse)
 
     return np.array(ans)
