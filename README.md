@@ -44,6 +44,8 @@ This is what each test covers:
 ### model
 * **test_model:** Tests the functions of `model.py`. They are designed to prove that the mathematical basis of the functions is correct: they use manufactured data and compare the results against an oracle. It also tests the λ selection that is later used in `metrics.py`.
 It also uses datasets generated directly from known weights, which is a good way to put the math of the NumPy algorithms to the test.
+### api
+* **test_api:** Tests the functions of `main.py` in the api directory, used to prove that the api only accepts the required data
 
 ## Evaluation Metrics
 
@@ -85,6 +87,9 @@ circumstances that a calendar-only model cannot capture.
 ├── env.example
 ├── pyproject.toml
 ├── src
+│   ├── api
+│   │   ├── __init__.py
+│   │   └── main.py
 │   └── bicing_predict
 │       ├── __init__.py
 │       ├── features
@@ -99,6 +104,9 @@ circumstances that a calendar-only model cannot capture.
 │           └── model.py
 ├── tests
 │   ├── __init__.py
+│   ├── test_api
+│   │   ├── conftest.py
+│   │   └── test_api.py
 │   ├── test_features
 │   │   ├── test_feature.py
 │   │   └── test_grouping.py

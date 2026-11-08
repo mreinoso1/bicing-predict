@@ -30,7 +30,6 @@ print(f"Chosen λ: {alphas[index_param]}")
 weights = np.zeros(X_train.shape[1])
 
 # Training model
-alpha = 0.001
 tolerance = 1e-10
 print("Training Model:")
 w, b, norma, epochs_used = model.Adam(
@@ -130,4 +129,5 @@ print(f"Means table — test RMSE: {rmse_test}, R^2: {r2_test}")
 
 save_dict = {"SplineTransformer": col_t, "Weights": w, "Intercept": b}
 
-joblib.dump(save_dict, "components.joblib")
+models_dir = root / "models"
+joblib.dump(save_dict, models_dir / "components.joblib")
