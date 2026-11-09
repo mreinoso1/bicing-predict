@@ -28,7 +28,9 @@ class PredictionResponse(BaseModel):
 # Variables
 app = FastAPI()
 root = Path(__file__).resolve().parents[2]
-components = joblib.load(root / "models" / "components.joblib")
+default_path = root / "models" / "components.joblib"
+model_path = Path(os.getenv("MODEL_PATH", default_path))
+components = joblib.load(model_path)
 Transformer = components["SplineTransformer"]
 weights = components["Weights"]
 intercept = components["Intercept"]
