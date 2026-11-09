@@ -7,6 +7,8 @@ What differentiates this project is the Ridge regression trained with a hand-wri
 which is tested against an oracle built with scikit-learn.
 The dataset of ~27M readings, processed with DuckDB, comes from the open data website of the Ajuntament de Barcelona. It uses the months from February to August 2026, excluding July because it was not published when the data was collected.
 
+p50 of the API response time is 8.61 miliseconds
+p95 of the API response time is 10.31 miliseconds
 ## Prerequisites
 To run the project, you need Python 3.12, uv and 7-Zip.
 Download the months listed above from this website: https://opendata-ajuntament.barcelona.cat/data/es/dataset/estat-estacions-bicing
